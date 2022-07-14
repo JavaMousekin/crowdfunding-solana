@@ -21,6 +21,8 @@ pub mod crowdfunding {
     }
 
     pub fn withdraw(ctx: Context<Withdraw>) -> ProgramResult {
+        amount = **fund.to_account_info().lamports.borrow();
+
         let fund = &mut ctx.accounts.fund;
         let user = &mut ctx.accounts.user;
 
@@ -33,11 +35,10 @@ pub mod crowdfunding {
         **fund.to_account_info().try_borrow_mut_lamports()? -= amount;
         **user.to_account_info().try_borrow_mut_lamports()? += amount;
 
-        fund.sum_donated = **fund.to_account_info().lamports.borrow();
         Ok(())
     }
 
-    pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> ProgramResult {
+    pub fn withdrawPart(ctx: Context<Withdraw>, amount: u64) -> ProgramResult {
         let fund = &mut ctx.accounts.fund;
         let user = &mut ctx.accounts.user;
 
